@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
+import { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import { GameProvider } from './context/GameContext';
+import Home from './pages/Home';
+import Juego from './pages/Juego';
+
+function AppContent() {
+  const [pantalla, setPantalla] = useState('home');
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <StatusBar style="dark" />
+
+      {pantalla === 'home' ? (
+        <Home onJugar={() => setPantalla('juego')} />
+      ) : (
+        <Juego onVolver={() => setPantalla('home')} />
+      )}
+    </>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <GameProvider>
+        <AppContent />
+      </GameProvider>
+    </SafeAreaProvider>
+  );
+}
